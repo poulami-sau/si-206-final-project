@@ -1,6 +1,9 @@
+import os
 import sqlite3
 
-conn = sqlite3.connect('/Users/katechung/Desktop/SI 206/zipCode_airQUality.db')
+dir_path = os.path.dirname(os.path.realpath(__file__))
+db_filename = dir_path + '/zipCode_airQuality.db'
+conn = sqlite3.connect(db_filename)
 cur = conn.cursor()
 
 zip_codes = [("Birmingham", "AL", 35211), ("Montgomery", "AL", 36117), ("Huntsville", "AL", 35810), ("Mobile", "AL", 36609), ("Tuscaloosa", "AL", 35401),
