@@ -27,7 +27,6 @@ for row in coordinates:
     params["lon"] = lon
     response = requests.get(api_ninjas_url, params=params)
     info = json.loads(response.text)
-    print(info["overall_aqi"])
     aqi_num = info["overall_aqi"]
     date_today = date.today()
     cur.execute("INSERT OR IGNORE INTO air_quality_data (zip_code, date_val, aqi) VALUES (?, ?, ?)",
