@@ -9,7 +9,6 @@ db_filename = dir_path + '/zipCode_airQuality.db'
 conn = sqlite3.connect(db_filename)
 cur = conn.cursor()
 
-cur.execute("DROP TABLE IF EXISTS zip_code_to_coordinates")
 cur.execute("CREATE TABLE IF NOT EXISTS zip_code_to_coordinates (zip_code TEXT, latitude REAL, longitude REAL)")
 
 geocodio_url = "https://api.geocod.io/v1.7/geocode?"
