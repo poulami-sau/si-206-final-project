@@ -1,0 +1,5 @@
+# this file stores api keys
+config.py
+
+# ignore this if it generates
+__pycache__
