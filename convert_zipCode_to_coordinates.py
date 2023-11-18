@@ -14,7 +14,6 @@ cur.execute("CREATE TABLE IF NOT EXISTS zip_code_to_coordinates (zip_code TEXT, 
 
 geocodio_url = "https://api.geocod.io/v1.7/geocode?"
 params = {}
-params["api_key"] = GEOCODIO_KEY
 params["postal_code"] = ""
 
 cur.execute("SELECT zip_code FROM zip_code_data")
