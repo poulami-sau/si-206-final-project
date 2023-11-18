@@ -65,9 +65,5 @@ for city_val, state_val, zip_code_val in zip_codes:
                (city_val, state_val, zip_code_val))
 conn.commit()
 
-cur.execute("SELECT city, state, zip_code FROM zip_code_data")
-for row in cur:
-    print(row)
-
 cur.close()
 conn.close()
