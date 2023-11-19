@@ -44,6 +44,7 @@ for zip_code, latitude, longitude in coordinates:
 
         cur.execute("INSERT OR IGNORE INTO weather_info_data (zip_code, date_val, hour_gmt_val, temperature, relative_humidity, precipitation, cloud_cover) VALUES (?, ?, ?, ?, ?, ?, ?)",
                 (zip_code, date_yesterday, yesterday_timestamp_hour, yesterday_temperature, yesterday_relative_humidity, yesterday_precipitation, yesterday_cloud_cover))
+        
 conn.commit()
 
 cur.close()
