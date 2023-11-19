@@ -3,3 +3,4 @@ config.py
 
 # ignore this if it generates
 __pycache__
+.DS_Store
