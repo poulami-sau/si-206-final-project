@@ -58,7 +58,7 @@ zip_codes = [("Birmingham", "AL", 35211), ("Montgomery", "AL", 36117),
             ("Cheyenne", "WY", 82001), ("Casper", "WY", 82601)]
 
 cur.execute("DROP TABLE IF EXISTS zip_code_data")
-cur.execute("CREATE TABLE IF NOT EXISTS zip_code_data (city TEXT, state TEXT, zip_code TEXT)")
+cur.execute("CREATE TABLE IF NOT EXISTS zip_code_data (zip_code_id INTEGER PRIMARY KEY, city TEXT, state TEXT, zip_code TEXT)")
 
 for city_val, state_val, zip_code_val in zip_codes:
     cur.execute("INSERT OR IGNORE INTO zip_code_data (city, state, zip_code) VALUES (?, ?, ?)",
