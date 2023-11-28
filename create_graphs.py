@@ -37,3 +37,19 @@ ax2.set_ylabel("average aqi")
 ax2.set_title("Average AQI vs Average Relative Humidity per State")
 
 fig2.savefig("avg_aqi_vs_avg_relative_humidity.png")
+
+fig3, ax3 = plt.subplots()
+ax3.scatter(avg_precipitation, avg_aqi)
+ax3.set_xlabel("average precipitation")
+ax3.set_ylabel("average aqi")
+ax3.set_title("Average AQI vs Average Precipitation per State")
+
+fig3.savefig("avg_aqi_vs_avg_precipitation.png")
+
+fig4, ax4 = plt.subplots()
+ax4.scatter(avg_cloud_cover, avg_aqi)
+ax4.set_xlabel("average cloud cover")
+ax4.set_ylabel("average aqi")
+ax4.set_title("Average AQI vs Average Cloud Cover per State")
+
+fig4.savefig("avg_aqi_vs_avg_cloud_cover.png")
