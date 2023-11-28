@@ -47,20 +47,5 @@ for i in range(max_zip_code_id, max_zip_code_id + 25):
                 (zip_code_id, today_day, aqi_num))
     conn.commit()"""
 
-
-"""cur.execute("CREATE TABLE IF NOT EXISTS air_quality_data (zip_code_id INTEGER, date_num INTEGER, aqi INTEGER)")
-cur.execute("SELECT d.day, a.aqi, a.zip_code_id "
-            "FROM air_quality_stats a "
-            "JOIN dates d " 
-            "ON a.date_val = d.date")
-data = cur.fetchall()
-for info in data:
-    air_date = info[0]
-    quality_num = info[1]
-    id_num = info[2]
-    cur.execute("INSERT OR IGNORE INTO air_quality_data (zip_code_id, date_num, aqi) VALUES (?, ?, ?)",
-               (id_num, air_date, quality_num))
-conn.commit()"""
-
 cur.close()
 conn.close()
