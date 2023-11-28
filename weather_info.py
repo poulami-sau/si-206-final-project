@@ -22,7 +22,7 @@ params["forecast_days"] = 1
 
 date_yesterday = date.today() - timedelta(days = 1)
 
-cur.execute("SELECT MAX(zip_code_id) FROM alt_weather_info_data WHERE date_val = ?", (date_yesterday,))
+cur.execute("SELECT MAX(zip_code_id) FROM weather_data WHERE date_val = ?", (date_yesterday,))
 max_zip_code_id = cur.fetchone()[0]
 
 if max_zip_code_id == None:
