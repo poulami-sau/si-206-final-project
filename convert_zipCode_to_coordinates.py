@@ -28,7 +28,6 @@ for zip_code in zip_codes:
     zip_code_latitude = zip_code_info["results"][0]["location"]["lat"]
     zip_code_longitude = zip_code_info["results"][0]["location"]["lng"]
 
-    #print(zip_code[0], params["postal_code"], zip_code_latitude, zip_code_longitude)
 
     cur.execute("INSERT OR IGNORE INTO zip_code_to_coordinates (zip_code_id, latitude, longitude) VALUES (?, ?, ?)", (zip_code[0], zip_code_latitude, zip_code_longitude))
 

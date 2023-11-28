@@ -9,7 +9,7 @@ db_filename = dir_path + '/zipCode_airQuality.db'
 conn = sqlite3.connect(db_filename)
 cur = conn.cursor()
 
-cur.execute("CREATE TABLE IF NOT EXISTS weather_data (zip_code_id INTEGER, date_val TEXT, hour_gmt_val INTEGER, temperature REAL, relative_humidity INTEGER, precipitation REAL, cloud_cover INTEGER, FOREIGN KEY (zip_code_id) REFERENCES zip_code_data(zip_code_id))")
+cur.execute("CREATE TABLE IF NOT EXISTS weather_data (zip_code_id INTEGER, date_num INTEGER, hour_gmt_val INTEGER, temperature REAL, relative_humidity INTEGER, precipitation REAL, cloud_cover INTEGER, FOREIGN KEY (zip_code_id) REFERENCES zip_code_data(zip_code_id))")
 
 open_meteo_url = "https://api.open-meteo.com/v1/forecast?"
 params = {}
@@ -20,7 +20,8 @@ params["temperature_unit"] = "fahrenheit"
 params["past_days"] = 2
 params["forecast_days"] = 1
 
-date_yesterday = date.today() - timedelta(days = 1)
+cur.execute("SELECT MAX(date_num) FROM weather_data")
+date_yesterday = cur.fetchone()[0]
 
 cur.execute("SELECT MAX(zip_code_id) FROM weather_data WHERE date_val = ?", (date_yesterday,))
 max_zip_code_id = cur.fetchone()[0]
