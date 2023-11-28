@@ -65,5 +65,16 @@ for city_val, state_val, zip_code_val in zip_codes:
                (city_val, state_val, zip_code_val))
 conn.commit()
 
+
+dates = [(1, "2023-11-17"), (2, "2023-11-18"), (3, "2023-11-19"), (4, "2023-11-20"), 
+         (5, "2023-11-21"), (6, "2023-11-22"), (7, "2023-11-23")]
+
+cur.execute("DROP TABLE IF EXISTS dates")
+cur.execute("CREATE TABLE IF NOT EXISTS dates (day INTEGER, date TEXT)")
+
+for date_num, date_text in dates:
+    cur.execute("INSERT OR IGNORE INTO dates (day, date) VALUES (?, ?)", (date_num, date_text))
+conn.commit()
+
 cur.close()
 conn.close()
