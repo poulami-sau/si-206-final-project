@@ -10,10 +10,10 @@ db_filename = dir_path + '/zipCode_airQuality.db'
 conn = sqlite3.connect(db_filename)
 cur = conn.cursor()
 
-"""cur.execute("CREATE TABLE IF NOT EXISTS air_quality_stats (zip_code_id INTEGER, date_val TEXT, aqi INTEGER)")
+"""cur.execute("CREATE TABLE IF NOT EXISTS air_quality_data (zip_code_id INTEGER, date_num INTEGER, aqi INTEGER)")
 
 date_today = date.today()
-cur.execute("SELECT MAX(zip_code_id) FROM air_quality_stats WHERE date_val = ?", (date_today,))
+cur.execute("SELECT MAX(zip_code_id) FROM air_quality_data WHERE date_num = ?", (date_today,))
 max_zip_code_id = cur.fetchone()[0]
 
 if max_zip_code_id == None:
@@ -36,27 +36,31 @@ for i in range(max_zip_code_id, max_zip_code_id + 25):
     lon = longitude
     params["lat"] = lat
     params["lon"] = lon
+
+    cur.execute("SELECT day FROM dates WHERE date_today = date)
+    today_day = cur.fetchone()
+
     response = requests.get(api_ninjas_url, params=params)
     info = json.loads(response.text)
     aqi_num = info["overall_aqi"]
-    cur.execute("INSERT OR IGNORE INTO air_quality_stats (zip_code_id, date_val, aqi) VALUES (?, ?, ?)",
-                (zip_code_id, date_today, aqi_num))
+    cur.execute("INSERT OR IGNORE INTO air_quality_data (zip_code_id, date_num, aqi) VALUES (?, ?, ?)",
+                (zip_code_id, today_day, aqi_num))
     conn.commit()"""
 
-cur.execute("DROP TABLE IF EXISTS air_quality_data")
-cur.execute("CREATE TABLE IF NOT EXISTS air_quality_data (zip_code_id INTEGER, date_num INTEGER, aqi INTEGER)")
-cur.execute("SELECT day, aqi, zip_code_id "
-            "FROM air_quality_data "
-            "JOIN dates " 
-            "ON air_quality_stats.date_val = dates.date")
+
+"""cur.execute("CREATE TABLE IF NOT EXISTS air_quality_data (zip_code_id INTEGER, date_num INTEGER, aqi INTEGER)")
+cur.execute("SELECT d.day, a.aqi, a.zip_code_id "
+            "FROM air_quality_stats a "
+            "JOIN dates d " 
+            "ON a.date_val = d.date")
 data = cur.fetchall()
 for info in data:
     air_date = info[0]
     quality_num = info[1]
     id_num = info[2]
-    cur.execute("INSERT OR IGNORE INTO air_quality_stats (zip_code_id, date_num, aqi) VALUES (?, ?, ?)",
+    cur.execute("INSERT OR IGNORE INTO air_quality_data (zip_code_id, date_num, aqi) VALUES (?, ?, ?)",
                (id_num, air_date, quality_num))
-conn.commit()
+conn.commit()"""
 
 cur.close()
 conn.close()
