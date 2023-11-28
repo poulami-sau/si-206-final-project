@@ -10,7 +10,7 @@ conn = sqlite3.connect(db_filename)
 cur = conn.cursor()
 
 cur.execute("DROP TABLE IF EXISTS zip_code_to_coordinates")
-cur.execute("CREATE TABLE IF NOT EXISTS zip_code_to_coordinates (zip_code_id INTEGER, zip_code TEXT, latitude REAL, longitude REAL, FOREIGN KEY (zip_code_id) REFERENCES zip_code_data(zip_code_id))")
+cur.execute("CREATE TABLE IF NOT EXISTS zip_code_to_coordinates (zip_code_id INTEGER, latitude REAL, longitude REAL, FOREIGN KEY (zip_code_id) REFERENCES zip_code_data(zip_code_id))")
 
 geocodio_url = "https://api.geocod.io/v1.7/geocode?"
 params = {}
@@ -28,7 +28,9 @@ for zip_code in zip_codes:
     zip_code_latitude = zip_code_info["results"][0]["location"]["lat"]
     zip_code_longitude = zip_code_info["results"][0]["location"]["lng"]
 
-    cur.execute("INSERT OR IGNORE INTO zip_code_to_coordinates (zip_code_id, zip_code, latitude, longitude) VALUES (?, ?, ?, ?)", (zip_code[0], params["postal_code"], zip_code_latitude, zip_code_longitude))
+    #print(zip_code[0], params["postal_code"], zip_code_latitude, zip_code_longitude)
+
+    cur.execute("INSERT OR IGNORE INTO zip_code_to_coordinates (zip_code_id, latitude, longitude) VALUES (?, ?, ?)", (zip_code[0], zip_code_latitude, zip_code_longitude))
 
 conn.commit()
 
