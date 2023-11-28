@@ -10,28 +10,38 @@ db_filename = dir_path + '/zipCode_airQuality.db'
 conn = sqlite3.connect(db_filename)
 cur = conn.cursor()
 
-cur.execute("CREATE TABLE IF NOT EXISTS air_quality_data (zip_code TEXT, date_val TEXT, aqi INTEGER)")
+cur.execute("CREATE TABLE IF NOT EXISTS air_quality_stats (zip_code_id INTEGER, date_val TEXT, aqi INTEGER)")
 
-cur.execute("SELECT * FROM zip_code_to_coordinates")
-coordinates = cur.fetchall()
-api_ninjas_url = "https://api.api-ninjas.com/v1/airquality?"
-params = {}
-params["X-Api-Key"] = AIR_QUALITY_KEY
-params["lat"] = ""
-params["lon"] = ""
-for row in coordinates:
-    zip = row[0]
-    lat = row[1]
-    lon = row[2]
+date_today = date.today()
+cur.execute("SELECT MAX(zip_code_id) FROM air_quality_stats WHERE date_val = ?", (date_today,))
+max_zip_code_id = cur.fetchone()[0]
+
+if max_zip_code_id == None:
+    max_zip_code_id = 1
+elif max_zip_code_id < 100:
+    max_zip_code_id += 1
+elif max_zip_code_id == 100:
+    exit()
+
+for i in range(max_zip_code_id, max_zip_code_id + 25):
+    cur.execute("SELECT * FROM zip_code_to_coordinates where zip_code_id = ?", (i,))
+    zip_code_id, latitude, longitude = cur.fetchone()
+        
+    api_ninjas_url = "https://api.api-ninjas.com/v1/airquality?"
+    params = {}
+    params["X-Api-Key"] = AIR_QUALITY_KEY
+    params["lat"] = ""
+    params["lon"] = ""
+    lat = latitude
+    lon = longitude
     params["lat"] = lat
     params["lon"] = lon
     response = requests.get(api_ninjas_url, params=params)
     info = json.loads(response.text)
     aqi_num = info["overall_aqi"]
-    date_today = date.today()
-    cur.execute("INSERT OR IGNORE INTO air_quality_data (zip_code, date_val, aqi) VALUES (?, ?, ?)",
-               (zip, date_today, aqi_num))
-conn.commit()
+    cur.execute("INSERT OR IGNORE INTO air_quality_stats (zip_code_id, date_val, aqi) VALUES (?, ?, ?)",
+                (zip_code_id, date_today, aqi_num))
+    conn.commit()
 
 cur.close()
 conn.close()
