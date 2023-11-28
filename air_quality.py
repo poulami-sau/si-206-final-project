@@ -24,7 +24,7 @@ elif max_zip_code_id == 100:
     exit()
 
 for i in range(max_zip_code_id, max_zip_code_id + 25):
-    cur.execute("SELECT * FROM zip_code_to_coordinates where zip_code_id = ?", (i,))
+    cur.execute("SELECT zip_code_id, latitude, longitude FROM zip_code_to_coordinates where zip_code_id = ?", (i,))
     zip_code_id, latitude, longitude = cur.fetchone()
         
     api_ninjas_url = "https://api.api-ninjas.com/v1/airquality?"
@@ -37,7 +37,7 @@ for i in range(max_zip_code_id, max_zip_code_id + 25):
     params["lat"] = lat
     params["lon"] = lon
 
-    cur.execute("SELECT day FROM dates WHERE date_today = date)
+    cur.execute("SELECT day FROM dates WHERE date = date_today")
     today_day = cur.fetchone()
 
     response = requests.get(api_ninjas_url, params=params)
