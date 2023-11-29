@@ -37,7 +37,7 @@ def create_aq_table (date_today = date.today()):
         params["lat"] = lat
         params["lon"] = lon
 
-        cur.execute("SELECT day FROM dates WHERE date = date_today")
+        cur.execute("SELECT day_id FROM dates WHERE date = ?", (date_today,))
         today_day = cur.fetchone()
 
         response = requests.get(api_ninjas_url, params=params)
