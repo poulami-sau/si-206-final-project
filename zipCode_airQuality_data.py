@@ -4,7 +4,6 @@ import sqlite3
 dir_path = os.path.dirname(os.path.realpath(__file__))
 db_filename = dir_path + '/zipCode_airQuality.db'
 conn = sqlite3.connect(db_filename)
-cur = conn.cursor()
 
 zip_codes = [("Birmingham", "AL", 35211), ("Montgomery", "AL", 36117),
             ("Anchorage", "AK", 99504), ("Fairbanks", "AK", 99709),
@@ -57,23 +56,29 @@ zip_codes = [("Birmingham", "AL", 35211), ("Montgomery", "AL", 36117),
             ("Milwaukee", "WI", 53202), ("Madison", "WI", 53703),
             ("Cheyenne", "WY", 82001), ("Casper", "WY", 82601)]
 
-cur.execute("DROP TABLE IF EXISTS zip_code_data")
-cur.execute("CREATE TABLE IF NOT EXISTS zip_code_data (zip_code_id INTEGER PRIMARY KEY, city TEXT, state TEXT, zip_code TEXT)")
+def create_zip_code_table(zip_codes):
+    cur = conn.cursor()
+    cur.execute("DROP TABLE IF EXISTS zip_code_data")
+    cur.execute("CREATE TABLE IF NOT EXISTS zip_code_data (zip_code_id INTEGER PRIMARY KEY, city TEXT, state TEXT, zip_code TEXT)")
 
-for city_val, state_val, zip_code_val in zip_codes:
-    cur.execute("INSERT OR IGNORE INTO zip_code_data (city, state, zip_code) VALUES (?, ?, ?)",
-               (city_val, state_val, zip_code_val))
-conn.commit()
+    for city_val, state_val, zip_code_val in zip_codes:
+        cur.execute("INSERT OR IGNORE INTO zip_code_data (city, state, zip_code) VALUES (?, ?, ?)",
+                (city_val, state_val, zip_code_val))
+    conn.commit()
+    cur.close()
+    conn.close()
 
-dates = [(1, "2023-11-17"), (2, "2023-11-18"), (3, "2023-11-19"), (4, "2023-11-20"), 
-         (5, "2023-11-21"), (6, "2023-11-22"), (7, "2023-11-23")]
 
-cur.execute("DROP TABLE IF EXISTS dates")
-cur.execute("CREATE TABLE IF NOT EXISTS dates (day_id INTEGER, date TEXT)")
+dates = [("2023-11-17", "2023-11-18", "2023-11-19", "2023-11-20", "2023-11-21", "2023-11-22", "2023-11-23")]
 
-for date_num, date_text in dates:
-    cur.execute("INSERT OR IGNORE INTO dates (day_id, date) VALUES (?, ?)", (date_num, date_text))
-conn.commit()
+def create_dates_table(dates):
+    cur = conn.cursor()
+    cur.execute("DROP TABLE IF EXISTS dates")
+    cur.execute("CREATE TABLE IF NOT EXISTS dates (day_id INTEGER PRIMARY KEY, date TEXT)")
 
-cur.close()
-conn.close()
+    for date_text in dates:
+        cur.execute("INSERT OR IGNORE INTO dates (day_id, date) VALUES (?,)", (date_text))
+    conn.commit()
+
+    cur.close()
+    conn.close()
