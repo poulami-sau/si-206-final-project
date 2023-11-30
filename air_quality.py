@@ -5,6 +5,7 @@ import json
 from config import AIR_QUALITY_KEY
 from datetime import date
 
+
 def connect_database():
     dir_path = os.path.dirname(os.path.realpath(__file__))
     db_filename = dir_path + '/demo.db'
@@ -13,9 +14,8 @@ def connect_database():
 
     return cur, conn
 
+
 def create_aq_table (cur, conn, date_today):
-    cur.execute("DROP TABLE IF EXISTS air_quality_data")
-    cur.execute("CREATE TABLE IF NOT EXISTS air_quality_data (zip_code_id INTEGER, date_num INTEGER, aqi INTEGER)")
     cur.execute("SELECT MAX(zip_code_id) FROM air_quality_data WHERE date_num = ?", (date_today,))
     max_zip_code_id = cur.fetchone()[0]
 
@@ -52,6 +52,7 @@ def create_aq_table (cur, conn, date_today):
 
 
 cur, conn = connect_database()
+cur.execute("CREATE TABLE IF NOT EXISTS air_quality_data (zip_code_id INTEGER, date_num INTEGER, aqi INTEGER)")
 create_aq_table(cur, conn, date_today = date.today())
 cur.close()
 conn.close()
