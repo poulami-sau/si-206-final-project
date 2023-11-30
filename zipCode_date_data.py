@@ -3,7 +3,7 @@ import sqlite3
 
 def connect_database():
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    db_filename = dir_path + '/zipCode_airQuality.db'
+    db_filename = dir_path + '/demo.db'
     conn = sqlite3.connect(db_filename)
     cur = conn.cursor()
 
@@ -25,7 +25,7 @@ def create_dates_table(cur, conn, dates):
     cur.execute("CREATE TABLE IF NOT EXISTS dates (day_id INTEGER PRIMARY KEY, date TEXT)")
 
     for date_text in dates:
-        cur.execute("INSERT OR IGNORE INTO dates (day_id, date) VALUES (?,)", (date_text))
+        cur.execute("INSERT OR IGNORE INTO dates (date,) VALUES (?,)", (date_text,))
     conn.commit()
 
 
@@ -83,5 +83,6 @@ create_zip_code_table(cur, conn, zip_codes = [("Birmingham", "AL", 35211), ("Mon
                                             ("Cheyenne", "WY", 82001), ("Casper", "WY", 82601)])
 
 create_dates_table(cur, conn, dates = ["2023-11-17", "2023-11-18", "2023-11-19", "2023-11-20", 
-                                       "2023-11-21", "2023-11-22", "2023-11-23"])
+                                       "2023-11-21", "2023-11-22", "2023-11-23", "2023-11-29"])
+
 conn.close()

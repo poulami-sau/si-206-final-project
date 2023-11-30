@@ -7,7 +7,7 @@ from datetime import date
 
 def connect_database():
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    db_filename = dir_path + '/zipCode_airQuality.db'
+    db_filename = dir_path + '/demo.db'
     conn = sqlite3.connect(db_filename)
     cur = conn.cursor()
 
