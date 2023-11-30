@@ -1,6 +1,7 @@
 import os
 import sqlite3
 
+
 def connect_database():
     dir_path = os.path.dirname(os.path.realpath(__file__))
     db_filename = dir_path + '/demo.db'
@@ -11,9 +12,6 @@ def connect_database():
 
 
 def create_zip_code_table(cur, conn, zip_codes):
-    cur.execute("DROP TABLE IF EXISTS zip_code_data")
-    cur.execute("CREATE TABLE IF NOT EXISTS zip_code_data (zip_code_id INTEGER PRIMARY KEY, city TEXT, state TEXT, zip_code TEXT)")
-
     for city_val, state_val, zip_code_val in zip_codes:
         cur.execute("INSERT OR IGNORE INTO zip_code_data (city, state, zip_code) VALUES (?, ?, ?)",
                 (city_val, state_val, zip_code_val))
@@ -21,16 +19,14 @@ def create_zip_code_table(cur, conn, zip_codes):
 
 
 def create_dates_table(cur, conn, dates):
-    cur.execute("DROP TABLE IF EXISTS dates")
-    cur.execute("CREATE TABLE IF NOT EXISTS dates (day_id INTEGER PRIMARY KEY, date TEXT)")
-
     for date_text in dates:
         cur.execute("INSERT OR IGNORE INTO dates (date) VALUES (?)", (date_text,))
     conn.commit()
 
 
 cur, conn = connect_database()
-
+cur.execute("CREATE TABLE IF NOT EXISTS zip_code_data (zip_code_id INTEGER PRIMARY KEY, city TEXT, state TEXT, zip_code TEXT)")
+cur.execute("CREATE TABLE IF NOT EXISTS dates (day_id INTEGER PRIMARY KEY, date TEXT)")
 create_zip_code_table(cur, conn, zip_codes = [("Birmingham", "AL", 35211), ("Montgomery", "AL", 36117),
                                             ("Anchorage", "AK", 99504), ("Fairbanks", "AK", 99709),
                                             ("Phoenix", "AZ", 85032), ("Tucson", "AZ", 85710),
@@ -81,8 +77,6 @@ create_zip_code_table(cur, conn, zip_codes = [("Birmingham", "AL", 35211), ("Mon
                                             ("Charleston", "WV", 25301), ("Huntington", "WV", 25701),
                                             ("Milwaukee", "WI", 53202), ("Madison", "WI", 53703),
                                             ("Cheyenne", "WY", 82001), ("Casper", "WY", 82601)])
-
 create_dates_table(cur, conn, dates = ["2023-11-17", "2023-11-18", "2023-11-19", "2023-11-20", 
                                        "2023-11-21", "2023-11-22", "2023-11-23", "2023-11-29"])
-
 conn.close()
