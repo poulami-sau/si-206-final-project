@@ -25,6 +25,8 @@ def create_dates_table(cur, conn, dates):
 
 
 cur, conn = connect_database()
+cur.execute("DROP TABLE IF EXISTS zip_code_data")
+cur.execute("DROP TABLE IF EXISTS dates")
 cur.execute("CREATE TABLE IF NOT EXISTS zip_code_data (zip_code_id INTEGER PRIMARY KEY, city TEXT, state TEXT, zip_code TEXT)")
 cur.execute("CREATE TABLE IF NOT EXISTS dates (day_id INTEGER PRIMARY KEY, date TEXT)")
 create_zip_code_table(cur, conn, zip_codes = [("Birmingham", "AL", 35211), ("Montgomery", "AL", 36117),
@@ -78,5 +80,5 @@ create_zip_code_table(cur, conn, zip_codes = [("Birmingham", "AL", 35211), ("Mon
                                             ("Milwaukee", "WI", 53202), ("Madison", "WI", 53703),
                                             ("Cheyenne", "WY", 82001), ("Casper", "WY", 82601)])
 create_dates_table(cur, conn, dates = ["2023-11-17", "2023-11-18", "2023-11-19", "2023-11-20", 
-                                       "2023-11-21", "2023-11-22", "2023-11-23", "2023-11-29"])
+                                       "2023-11-21", "2023-11-22", "2023-11-23"])
 conn.close()
