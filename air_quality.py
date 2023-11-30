@@ -16,10 +16,10 @@ def connect_database():
 
 
 def create_aq_table (cur, conn, date_today):
-    cur.execute("SELECT MAX(zip_code_id) FROM air_quality_data WHERE date_num = ?", (date_today,))
+    cur.execute("SELECT COUNT(*) FROM air_quality_data JOIN dates ON air_quality_data.date_num = dates.day_id WHERE dates.date = ?", (date_today,))
     max_zip_code_id = cur.fetchone()[0]
 
-    if max_zip_code_id == None:
+    if max_zip_code_id == 0:
         max_zip_code_id = 1
     elif max_zip_code_id < 100:
         max_zip_code_id += 1
