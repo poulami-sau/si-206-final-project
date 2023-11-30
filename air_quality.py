@@ -13,9 +13,9 @@ def connect_database():
 
     return cur, conn
 
-def create_aq_table (date_today):
+def create_aq_table (cur, conn, date_today):
+    cur.execute("DROP TABLE IF EXISTS air_quality_data")
     cur.execute("CREATE TABLE IF NOT EXISTS air_quality_data (zip_code_id INTEGER, date_num INTEGER, aqi INTEGER)")
-
     cur.execute("SELECT MAX(zip_code_id) FROM air_quality_data WHERE date_num = ?", (date_today,))
     max_zip_code_id = cur.fetchone()[0]
 
@@ -41,17 +41,17 @@ def create_aq_table (date_today):
         params["lon"] = lon
 
         cur.execute("SELECT day_id FROM dates WHERE date = ?", (date_today,))
-        today_day = cur.fetchone()
+        today_day = cur.fetchone()[0]
 
         response = requests.get(api_ninjas_url, params=params)
         info = json.loads(response.text)
         aqi_num = info["overall_aqi"]
         cur.execute("INSERT OR IGNORE INTO air_quality_data (zip_code_id, date_num, aqi) VALUES (?, ?, ?)",
                     (zip_code_id, today_day, aqi_num))
-        conn.commit()
+    conn.commit()
 
 
-    cur, conn = connect_database()
-    create_aq_table(cur, conn, date_today = date.today())
-    cur.close()
-    conn.close()
+cur, conn = connect_database()
+create_aq_table(cur, conn, date_today = date.today())
+cur.close()
+conn.close()
