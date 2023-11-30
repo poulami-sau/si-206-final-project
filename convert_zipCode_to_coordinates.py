@@ -47,6 +47,7 @@ def insert_data(cur, conn, url, params):
 
 
 
+
 # executed code
 cur, conn = connect_database()
 
