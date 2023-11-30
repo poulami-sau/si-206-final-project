@@ -25,7 +25,7 @@ def create_dates_table(cur, conn, dates):
     cur.execute("CREATE TABLE IF NOT EXISTS dates (day_id INTEGER PRIMARY KEY, date TEXT)")
 
     for date_text in dates:
-        cur.execute("INSERT OR IGNORE INTO dates (date,) VALUES (?,)", (date_text,))
+        cur.execute("INSERT OR IGNORE INTO dates (date) VALUES (?)", (date_text,))
     conn.commit()
 
 
