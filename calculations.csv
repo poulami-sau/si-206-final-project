@@ -1,4 +1,4 @@
-state,avg_temperature,avg_relative_humidity,avg_precipitation,avg_cloud_cover,avg_aqi
+state,avg_weekly_temperature,avg_weekly_relative_humidity,avg_weekly_precipitation,avg_weekly_cloud_cover,avg_weekly_aqi
 AK,12.34,76.58,0.03393,61.64,58
 AL,57.44,73.92,0.20179,48.15,66
 AR,51.42,74.37,0.05476,51.58,79
