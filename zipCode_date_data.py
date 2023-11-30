@@ -1,10 +1,11 @@
 import os
 import sqlite3
+from datetime import date
 
 
 def connect_database():
     dir_path = os.path.dirname(os.path.realpath(__file__))
-    db_filename = dir_path + '/demo.db'
+    db_filename = dir_path + '/zipCode_airQuality.db'
     conn = sqlite3.connect(db_filename)
     cur = conn.cursor()
 
@@ -12,71 +13,81 @@ def connect_database():
 
 
 def create_zip_code_table(cur, conn, zip_codes):
-    for city_val, state_val, zip_code_val in zip_codes:
-        cur.execute("INSERT OR IGNORE INTO zip_code_data (city, state, zip_code) VALUES (?, ?, ?)",
-                (city_val, state_val, zip_code_val))
+    for city_val, state_id, zip_code_val in zip_codes:
+        cur.execute("INSERT OR IGNORE INTO zip_code_data (city, state_id, zip_code) VALUES (?, ?, ?)",
+                (city_val, state_id, zip_code_val))
     conn.commit()
 
 
-def create_dates_table(cur, conn, dates):
-    for date_text in dates:
-        cur.execute("INSERT OR IGNORE INTO dates (date) VALUES (?)", (date_text,))
+def create_dates_table(cur, conn):
+    today = date.today()
+    cur.execute("INSERT OR IGNORE INTO dates (date) VALUES (?)", (today,))
+    conn.commit()
+
+
+def create_states_table(cur, conn, states):
+    for state_name in states:
+        cur.execute("INSERT OR IGNORE INTO states (state) VALUES (?)", (state_name,))
     conn.commit()
 
 
 cur, conn = connect_database()
-cur.execute("CREATE TABLE IF NOT EXISTS zip_code_data (zip_code_id INTEGER PRIMARY KEY, city TEXT, state TEXT, zip_code TEXT)")
+cur.execute("CREATE TABLE IF NOT EXISTS zip_code_data (zip_code_id INTEGER PRIMARY KEY, city TEXT, state_id INTEGER, zip_code TEXT)")
 cur.execute("CREATE TABLE IF NOT EXISTS dates (day_id INTEGER PRIMARY KEY, date TEXT)")
-create_zip_code_table(cur, conn, zip_codes = [("Birmingham", "AL", 35211), ("Montgomery", "AL", 36117),
-                                            ("Anchorage", "AK", 99504), ("Fairbanks", "AK", 99709),
-                                            ("Phoenix", "AZ", 85032), ("Tucson", "AZ", 85710),
-                                            ("Little Rock", "AR", 72204), ("Fort Smith", "AR", 72903),
-                                            ("Los Angeles", "CA", 90011), ("San Diego", "CA", 92154),
-                                            ("Denver", "CO", 80219), ("Colorado Springs", "CO", 80918),
-                                            ("Bridgeport", "CT", "06606"), ("New Haven", "CT", "06511"),
-                                            ("Wilmington", "DE", 19805), ("Dover", "DE", 19901),
-                                            ("Jacksonville", "FL", 32210), ("Miami", "FL", 33186),
-                                            ("Atlanta", "GA", 30318), ("Augusta", "GA", 30906),
-                                            ("Honolulu", "HI", 96815), ("Pearl City", "HI", 96782),
-                                            ("Boise", "ID", 83709), ("Meridian", "ID", 83646),
-                                            ("Chicago", "IL", 60629), ("Aurora", "IL", 60506),
-                                            ("Indianapolis", "IN", 46227), ("Fort Wayne", "IN", 46815),
-                                            ("Des Moines", "IA", 50315), ("Cedar Rapids", "IA", 52402),
-                                            ("Wichita", "KS", 67212), ("Overland Park", "KS", 66212),
-                                            ("Louisville", "KY", 40214), ("Lexington", "KY", 40517),
-                                            ("New Orleans", "LA", 70119), ("Baton Rouge", "LA", 70809),
-                                            ("Portland", "ME", "04101"), ("Lewiston", "ME", "04240"),
-                                            ("Baltimore", "MD", 21215), ("Frederick", "MD", 21701),
-                                            ("Boston", "MA", "02124"), ("Worcester", "MA", "01604"),
-                                            ("Detroit", "MI", 48219), ("Grand Rapids", "MI", 49504),
-                                            ("Minneapolis", "MN", 55407), ("Saint Paul", "MN", 55106),
-                                            ("Jackson", "MS", 39212), ("Gulfport", "MS", 39503),
-                                            ("Kansas City", "MO", 64118), ("Saint Louis", "MO", 63116),
-                                            ("Billings", "MT", 59102), ("Missoula", "MT", 59801),
-                                            ("Omaha", "NE", 68104), ("Lincoln", "NE", 68503),
-                                            ("Las Vegas", "NV", 89103), ("Henderson", "NV", 89014),
-                                            ("Manchester", "NH", "03101"), ("Nashua", "NH", "03060"),
-                                            ("Newark", "NJ", "07102"), ("Jersey City", "NJ", "07302"),
-                                            ("Albuquerque", "NM", 87102), ("Las Cruces", "NM", 88001),
-                                            ("New York City", "NY", 10019), ("Buffalo", "NY", 14201),
-                                            ("Charlotte", "NC", 28202), ("Raleigh", "NC", 27601),
-                                            ("Fargo", "ND", 58102), ("Bismarck", "ND", 58501),
-                                            ("Columbus", "OH", 43215), ("Cleveland", "OH", 44113),
-                                            ("Oklahoma City", "OK", 73102), ("Tulsa", "OK", 74103),
-                                            ("Portland", "OR", 97201), ("Salem", "OR", 97301),
-                                            ("Philadelphia", "PA", 19103), ("Pittsburgh", "PA", 15222),
-                                            ("Providence", "RI", "02903"), ("Warwick", "RI", "02886"),
-                                            ("Columbia", "SC", 29201), ("Charleston", "SC", 29401),
-                                            ("Sioux Falls", "SD", 57104), ("Rapid City", "SD", 57701),
-                                            ("Nashville", "TN", 37203), ("Memphis", "TN", 38103),
-                                            ("Houston", "TX", 77002), ("Dallas", "TX", 75201),
-                                            ("Salt Lake City", "UT", 84111), ("Provo", "UT", 84601),
-                                            ("Burlington", "VT", "05401"), ("Rutland", "VT", "05701"),
-                                            ("Virginia Beach", "VA", 23451), ("Richmond", "VA", 23220),
-                                            ("Seattle", "WA", 98101), ("Spokane", "WA", 99201),
-                                            ("Charleston", "WV", 25301), ("Huntington", "WV", 25701),
-                                            ("Milwaukee", "WI", 53202), ("Madison", "WI", 53703),
-                                            ("Cheyenne", "WY", 82001), ("Casper", "WY", 82601)])
-create_dates_table(cur, conn, dates = ["2023-11-17", "2023-11-18", "2023-11-19", "2023-11-20", 
-                                       "2023-11-21", "2023-11-22", "2023-11-23"])
+cur.execute("CREATE TABLE IF NOT EXISTS states (state_id INTEGER PRIMARY KEY, state TEXT)")
+create_zip_code_table(cur, conn, zip_codes = [("Birmingham", 1, 35211), ("Montgomery", 1, 36117),
+                                            ("Anchorage", 2, 99504), ("Fairbanks", 2, 99709),
+                                            ("Phoenix", 3, 85032), ("Tucson", 3, 85710),
+                                            ("Little Rock", 4, 72204), ("Fort Smith", 4, 72903),
+                                            ("Los Angeles", 5, 90011), ("San Diego", 5, 92154),
+                                            ("Denver", 6, 80219), ("Colorado Springs", 6, 80918),
+                                            ("Bridgeport", 7, "06606"), ("New Haven", 7, "06511"),
+                                            ("Wilmington", 8, 19805), ("Dover", 8, 19901),
+                                            ("Jacksonville", 9, 32210), ("Miami", 9, 33186),
+                                            ("Atlanta", 10, 30318), ("Augusta", 10, 30906),
+                                            ("Honolulu", 11, 96815), ("Pearl City", 11, 96782),
+                                            ("Boise", 12, 83709), ("Meridian", 12, 83646),
+                                            ("Chicago", 13, 60629), ("Aurora", 13, 60506),
+                                            ("Indianapolis", 14, 46227), ("Fort Wayne", 14, 46815),
+                                            ("Des Moines", 15, 50315), ("Cedar Rapids", 15, 52402),
+                                            ("Wichita", 16, 67212), ("Overland Park", 16, 66212),
+                                            ("Louisville", 17, 40214), ("Lexington", 17, 40517),
+                                            ("New Orleans", 18, 70119), ("Baton Rouge", 18, 70809),
+                                            ("Portland", 19, "04101"), ("Lewiston", 19, "04240"),
+                                            ("Baltimore", 20, 21215), ("Frederick", 20, 21701),
+                                            ("Boston", 21, "02124"), ("Worcester", 21, "01604"),
+                                            ("Detroit", 22, 48219), ("Grand Rapids", 22, 49504),
+                                            ("Minneapolis", 23, 55407), ("Saint Paul", 23, 55106),
+                                            ("Jackson", 24, 39212), ("Gulfport", 24, 39503),
+                                            ("Kansas City", 25, 64118), ("Saint Louis", 25, 63116),
+                                            ("Billings", 26, 59102), ("Missoula", 26, 59801),
+                                            ("Omaha", 27, 68104), ("Lincoln", 27, 68503),
+                                            ("Las Vegas", 28, 89103), ("Henderson", 28, 89014),
+                                            ("Manchester", 29, "03101"), ("Nashua", 29, "03060"),
+                                            ("Newark", 30, "07102"), ("Jersey City", 30, "07302"),
+                                            ("Albuquerque", 31, 87102), ("Las Cruces", 31, 88001),
+                                            ("New York City", 32, 10019), ("Buffalo", 32, 14201),
+                                            ("Charlotte", 33, 28202), ("Raleigh", 33, 27601),
+                                            ("Fargo", 34, 58102), ("Bismarck", 34, 58501),
+                                            ("Columbus", 35, 43215), ("Cleveland", 35, 44113),
+                                            ("Oklahoma City", 36, 73102), ("Tulsa", 36, 74103),
+                                            ("Portland", 37, 97201), ("Salem", 37, 97301),
+                                            ("Philadelphia", 38, 19103), ("Pittsburgh", 38, 15222),
+                                            ("Providence", 39, "02903"), ("Warwick", 39, "02886"),
+                                            ("Columbia", 40, 29201), ("Charleston", 40, 29401),
+                                            ("Sioux Falls", 41, 57104), ("Rapid City", 41, 57701),
+                                            ("Nashville", 42, 37203), ("Memphis", 42, 38103),
+                                            ("Houston", 43, 77002), ("Dallas", 43, 75201),
+                                            ("Salt Lake City", 44, 84111), ("Provo", 44, 84601),
+                                            ("Burlington", 45, "05401"), ("Rutland", 45, "05701"),
+                                            ("Virginia Beach", 46, 23451), ("Richmond", 46, 23220),
+                                            ("Seattle", 47, 98101), ("Spokane", 47, 99201),
+                                            ("Charleston", 48, 25301), ("Huntington", 48, 25701),
+                                            ("Milwaukee", 49, 53202), ("Madison", 49, 53703),
+                                            ("Cheyenne", 50, 82001), ("Casper", 50, 82601)])
+create_dates_table(cur, conn)
+create_states_table(cur, conn, states = ["AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI", "ID", "IL",
+                                         "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT",
+                                         "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA",
+                                         "RI", "SC", "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"])
 conn.close()
