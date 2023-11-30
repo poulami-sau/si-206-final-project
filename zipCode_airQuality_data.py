@@ -82,3 +82,6 @@ def create_dates_table(dates):
 
     cur.close()
     conn.close()
+
+create_zip_code_table(zip_codes)
+create_dates_table(dates)
