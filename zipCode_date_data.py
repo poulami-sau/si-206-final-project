@@ -25,8 +25,6 @@ def create_dates_table(cur, conn, dates):
 
 
 cur, conn = connect_database()
-cur.execute("DROP TABLE IF EXISTS zip_code_data")
-cur.execute("DROP TABLE IF EXISTS dates")
 cur.execute("CREATE TABLE IF NOT EXISTS zip_code_data (zip_code_id INTEGER PRIMARY KEY, city TEXT, state TEXT, zip_code TEXT)")
 cur.execute("CREATE TABLE IF NOT EXISTS dates (day_id INTEGER PRIMARY KEY, date TEXT)")
 create_zip_code_table(cur, conn, zip_codes = [("Birmingham", "AL", 35211), ("Montgomery", "AL", 36117),
