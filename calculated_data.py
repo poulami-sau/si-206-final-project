@@ -20,7 +20,7 @@ def create_joined_table_return_results(cur):
 
     return results
 
-def create_csv(header_list):
+def create_csv(header_list, results):
     fout = open("calculations.csv", "w")
 
     writer = csv.writer(fout)
@@ -42,7 +42,7 @@ results = create_joined_table_return_results(cur)
 
 header_list = ["state", "avg_weekly_temperature", "avg_weekly_relative_humidity", "avg_weekly_precipitation", "avg_weekly_cloud_cover", "avg_weekly_aqi"]
 
-create_csv(header_list)
+create_csv(header_list, results)
 
 cur.close()
 conn.close()
