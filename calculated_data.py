@@ -31,6 +31,10 @@ def create_csv(header_list):
 
     fout.close()
 
+
+
+
+
 # executed code
 cur, conn = connect_database()
 
