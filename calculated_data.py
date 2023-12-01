@@ -11,9 +11,9 @@ def connect_database():
     return cur, conn
 
 def create_joined_table_return_results(cur):
-    cur.execute("CREATE TEMPORARY TABLE joined_weather_info AS SELECT state, AVG(temperature) AS avg_temperature, AVG(relative_humidity) AS avg_relative_humidity, AVG(precipitation) AS avg_precipitation, AVG(cloud_cover) AS avg_cloud_cover FROM weather_data JOIN zip_code_data ON weather_data.zip_code_id = zip_code_data.zip_code_id GROUP BY state")
+    cur.execute("CREATE TEMPORARY TABLE joined_weather_info AS SELECT state, AVG(temperature) AS avg_temperature, AVG(relative_humidity) AS avg_relative_humidity, AVG(precipitation) AS avg_precipitation, AVG(cloud_cover) AS avg_cloud_cover FROM weather_data JOIN zip_code_data ON weather_data.zip_code_id = zip_code_data.zip_code_id JOIN states ON zip_code_data.state_id = states.state_id GROUP BY state")
 
-    cur.execute("CREATE TEMPORARY TABLE joined_aqi_info AS SELECT state, AVG(aqi) AS avg_aqi FROM air_quality_data JOIN zip_code_data ON air_quality_data.zip_code_id = zip_code_data.zip_code_id GROUP BY state")
+    cur.execute("CREATE TEMPORARY TABLE joined_aqi_info AS SELECT state, AVG(aqi) AS avg_aqi FROM air_quality_data JOIN zip_code_data ON air_quality_data.zip_code_id = zip_code_data.zip_code_id JOIN states ON zip_code_data.state_id = states.state_id GROUP BY state")
 
     cur.execute("SELECT joined_weather_info.state, avg_temperature, avg_relative_humidity, avg_precipitation, avg_cloud_cover, avg_aqi FROM joined_weather_info JOIN joined_aqi_info ON joined_weather_info.state = joined_aqi_info.state")
     results = cur.fetchall()
